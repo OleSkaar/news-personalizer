@@ -1,0 +1,17 @@
+.header {
+  background-color: var(--header-bg-color);
+  min-height: 7vh;
+  max-height: 8vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1em;
+  padding: 0.1em;
+  color: var(--header-color);
+  box-shadow: 0 4px 8px 0 var(--box-shadow-color);
+}
+
+.header__text {
+  margin: 0;
+}

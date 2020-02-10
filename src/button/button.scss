@@ -1,0 +1,33 @@
+.button {
+  border: 1px solid var(--button-border);
+  border-radius: 5%;
+  background-color: inherit;
+  cursor: pointer;
+  color: var(--main-color);
+}
+
+.button--spacing {
+  margin: 0 auto 1em auto;
+  padding: 0.5em;
+}
+
+.button--spacing:hover {
+  background-color: var(--button-hover);
+}
+
+.card__action-button {
+  flex-grow: 1;
+  margin: 5px;
+}
+
+.card__action-button:hover {
+  background-color: var(--like-button-hover);
+}
+
+.card__action-button-clicked {
+  background-color: var(--like-button-clicked);
+}
+
+.card__action-button--text {
+  margin: 0;
+}

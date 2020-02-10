@@ -1,0 +1,10 @@
+.footer {
+  /*border-top: 1px solid var(--footer-border);*/
+  justify-content: center;
+  margin-top: 1em;
+}
+
+.footer--links {
+  text-decoration: underline;
+  color: var(--main-color);
+}
