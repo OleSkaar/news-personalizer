@@ -1,5 +1,52 @@
+html, body {
+  height: 100%;
+}
+/* Light mode */
+.light {
+  --main-bg-color: #dfe6e9;
+  --main-color: black;
+  --header-bg-color: #282c34;
+  --header-color: white;
+  --card-bg-color: white;
+  --card-text-color: black;
+  --box-shadow-color: rgba(0,0,0,0.2);
+  --button-border: black;
+  --button-hover: lightgray;
+  --like-button-hover: rgba(255, 0, 255, 1);
+  --like-button-clicked: rgba(255, 0, 255, 0.7);
+  --footer-border: black;
+}
+
+
+/* Dark mode */
+.dark{
+  --main-bg-color: #282c34;
+  --main-color: #DCDCDC;
+  --header-bg-color: #17191e ;
+  --header-color: white;
+  --card-bg-color: #3d4148;
+  --card-text-color: white;
+  --box-shadow-color: rgba(0,0,0,0.2);
+  --button-border: darkgray;
+  --button-hover: darkgray;
+  --like-button-hover: rgba(238, 130, 238, 1);
+  --like-button-clicked: rgba(238, 130, 238, 0.7);
+  --footer-border: darkgray;
+}
+
 .app {
   text-align: center;
   background-color: var(--main-bg-color);
   color: var(--main-color);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: filter 0.1s ease-out;
+  transition: opacity 0.1s ease-out;
+
+  &--blur {
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+
+  }
 }

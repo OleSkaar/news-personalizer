@@ -2,33 +2,35 @@
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  align-content: space-around;
+  align-content: center;
   justify-content: center;
   max-width: 960px;
   margin: 0 auto 0 auto;
   transition: 1s;
-  transition: flex 0.3s ease-out
-}
+  flex: 1 0 auto;
 
-.cardbox__wrapper {
-  display: flex;
-  flex-flow: column;
-  justify-content: flex-start;
-  height: 55em;
-  margin: auto;
-}
 
-.cardbox__load-more-wrapper {
-  transition: flex 0.3s ease-out;
-  height: auto;
-  flex-basis: 3em;
-  overflow: hidden;
-  margin-top: 1em;
-}
+  &__wrapper {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    margin: 0 auto 0 auto;
+    overflow: hidden;
+    flex: 1 0 auto;
+  }
 
-.cardbox__load-more-wrapper--collapsed {
-  overflow: hidden;
-  flex: 0;
-  border: 0px;
-  padding: 0;
+  &__load-more-wrapper {
+    transition: flex 0.3s ease-out;
+    flex-basis: 2.5em;
+    overflow: hidden;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+
+    &--collapsed {
+      overflow: hidden;
+      flex: 0;
+      border: 0px;
+      padding: 0;
+    }
+  }
 }

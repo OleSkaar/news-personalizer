@@ -4,30 +4,37 @@
   background-color: inherit;
   cursor: pointer;
   color: var(--main-color);
-}
 
-.button--spacing {
-  margin: 0 auto 1em auto;
-  padding: 0.5em;
-}
+  &--spacing {
+    padding: 0.5em;
 
-.button--spacing:hover {
-  background-color: var(--button-hover);
+    &:hover {
+      background-color: var(--button-hover);
+    }
+  }
+
+  &--large {
+    font-size: 1em;
+  }
+
+  &--top-margin {
+    margin-top: 2em;
+  }
 }
 
 .card__action-button {
   flex-grow: 1;
   margin: 5px;
-}
 
-.card__action-button:hover {
-  background-color: var(--like-button-hover);
-}
+  &:hover {
+    background-color: var(--like-button-hover);
+  }
 
-.card__action-button-clicked {
-  background-color: var(--like-button-clicked);
-}
+  &--clicked {
+    background-color: var(--like-button-clicked);
+  }
 
-.card__action-button--text {
-  margin: 0;
+  &--text {
+    margin: 0;
+  }
 }

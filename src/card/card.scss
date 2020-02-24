@@ -3,66 +3,73 @@
   height: 380px;
   max-width: 266px;
   flex: 1 1 auto;
-  margin: 5px;
+  margin: 0 5px 5px 5px;
   display: flex;
   flex-flow: column nowrap;
   box-shadow: 0 4px 8px 0 var(--box-shadow-color);
   transition: 0.3s;
-}
 
-.card--used {
-  opacity: 0.5;
-}
+  &--used {
+    opacity: 0.5;
 
-.card:hover {
-  box-shadow: 0 16px 32px 0 var(--box-shadow-color);
-}
+    @media only screen
+      and (max-width: 420px) {
+        display: none;
+    }
+  }
 
-.card__image {
-  max-width: 266px;
-  height: 150px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
+  &:hover {
+    box-shadow: 0 16px 32px 0 var(--box-shadow-color);
+  }
 
-.card__headline-area {
-  text-align: top;
-  width: 100%;
-  overflow: hidden;
-  font-size: 0.8em;
-  height: 35%;
-  flex-grow: 1;
-  display: flex;
-}
+  &__image {
+    max-width: 266px;
+    height: 150px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
 
-.card__headline-area-text {
-  padding: 0.2em;
-}
+  &__headline-area {
+    text-align: top;
+    width: 100%;
+    overflow: hidden;
+    font-size: 0.8em;
+    height: 35%;
+    flex-grow: 1;
+    display: flex;
+    color: var(--card-text-color);
 
-.card__headline-area--link {
-  margin: auto;
-  color: inherit;
-  text-decoration: inherit;
-}
+    &--text {
+      padding: 0.2em;
+    }
 
-.card__action-area {
-  width: 100%;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: stretch;
-  height: 10%;
-  background-color: var(--main-bg-color);
-}
+    &--link {
+      margin: auto;
+      color: inherit;
+      text-decoration: inherit;
+    }
+  }
 
-.card__publisher {
-  font-size: 0.8em;
-  flex-grow: 2;
-  text-overflow: clip;
-  overflow: hidden;
-  white-space: nowrap;
-}
+  &__action-area {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    height: 10%;
+    background-color: var(--main-bg-color);
+  }
 
-.card__publisher-name {
-  margin: 0;
-  padding: 0.5rem;
+  &__publisher {
+    font-size: 0.8em;
+    flex-grow: 2;
+    text-overflow: clip;
+    overflow: hidden;
+    white-space: nowrap;
+    color: var(--card-text-color);
+  }
+
+  &__publisher-name {
+    margin: 0;
+    padding: 0.5rem;
+  }
 }
