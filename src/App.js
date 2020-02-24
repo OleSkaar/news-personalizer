@@ -117,7 +117,7 @@ class App extends React.Component {
       }, () => {this.saveState()});
     } else {
       // else load articles from API and load into top articles
-      const apiKey = process.env.REACT_APP_API_KEY
+      const apiKey = `${process.env.REACT_APP_API_KEY}`
       const url = `https://newsapi.org/v2/top-headlines?country=us`
       const myHeaders = new Headers({ 'x-api-key': apiKey })
 
