@@ -1,17 +1,12 @@
 import React from 'react';
 import './app/app.scss';
-import './header/header.scss';
-import './cardbox/cardbox.scss';
-import './card/card.scss';
-import './button/button.scss';
-import './footer/footer.scss';
-import './modal/modal.scss';
-import DummyData from './dummydata.js';
 import Header from './header/header.jsx';
 import Footer from './footer/footer.jsx';
 import Modal from './modal/modal.jsx';
-import { Cardbox, LoadMore } from './cardbox/cardbox.jsx';
-import { DOMStrings, StateKey, ApiUrl, ApiKeyHeader } from './constants.js';
+import Cardbox from './cardbox/cardbox.jsx';
+import LoadMore from './cardbox/loadmore.jsx';
+import * as utils from './utils.js';
+import { DOMStrings, StateKey } from './constants.js';
 
 
 class App extends React.Component {
@@ -20,8 +15,6 @@ class App extends React.Component {
     this.state = {
       lastQueryResult: [],
       preferredPublishers: {},
-      searchBarInput: '',
-      searchQuery: '',
       topArticles: [],
       allArticlesRead: false,
       mode: DOMStrings.light,
@@ -31,19 +24,15 @@ class App extends React.Component {
     this.dislikeThreshold = -5;
   }
 
-  fetchDummyArticles() {
-    // Fetches articles and sorts based on publisher preference
-    return DummyData.articles;
-  }
-
   componentDidMount() {
     const storedState = JSON.parse(localStorage.getItem(StateKey));
+    console.log(storedState)
     if (storedState === null) {
       this.loadMoreArticles();
 
     } else {
       const storedTopArticles = storedState.topArticles;
-      for (let a of storedTopArticles) {a = addTopArticleMethods(a)}
+      for (let a of storedTopArticles) {a = utils.addTopArticleMethods(a)}
 
       this.setState({...storedState})
     }
@@ -53,40 +42,16 @@ class App extends React.Component {
     const topArticles = this.state.topArticles;
     const article = topArticles[articleIndex];
 
-    // Set publisher rating and button state value
-    let rating = value ? 1 : -1;
-
-    if (article.isUsed()) {
-      if (article.buttonState === value) {
-        rating *= -1;
-        article.clear();
-      } else {
-        rating *= 2;
-        article.setValue(value);
-      }
-    } else {
-      article.setValue(value);
-    }
+    // Set article liked/disliked value
+    let rating = utils.setArticleLikedValue(article, value)
 
     // Update publisher preference
     const preferredPublishers = this.state.preferredPublishers;
-    const publisher = article.data.source.name;
-
-    if (!preferredPublishers.hasOwnProperty(article.data.source.name)) {
-      preferredPublishers[publisher] = 0;
-    }
-
-    preferredPublishers[publisher] += rating;
+    utils.updatePublisherValue(preferredPublishers, article.data.source.name, rating)
 
     // Check if all articles are liked/disliked
-    let allArticlesRead = true;
-    for (const article of this.state.topArticles) {
-      if (!article.isUsed()) {
-        allArticlesRead = false;
-        break;
-      }
-    }
-
+    let allArticlesRead = utils.checkReadStatus(this.state.topArticles);
+    
     this.setState({
       topArticles: topArticles,
       preferredPublishers: preferredPublishers,
@@ -97,54 +62,41 @@ class App extends React.Component {
   loadMoreArticles() {
     // Remove top articles from state
     this.setState({topArticles: []});
+    const currentArticles = this.state.lastQueryResult;
+    const publishers = this.state.preferredPublishers;
+    const dislikes = this.dislikeThreshold;
+    const max = this.maxArticles;
 
-    let newArticles;
-    let newTopArticles;
     // If there are more articles in lastQuery, sort and load into top articles
-    if (this.state.lastQueryResult.length > 0) {
-      newArticles = sortByPublisher(this.state.lastQueryResult, this.state.preferredPublishers, this.dislikeThreshold);
-      newTopArticles = getTopArticles(newArticles, this.maxArticles);
+    if (currentArticles.length > 0) {
+      let newArticles = utils.sortByPublisher(currentArticles, publishers, dislikes);
+      let newTopArticles = utils.getTopArticles(newArticles, max);
 
-      this.setState({
-        allArticlesRead: false,
-        lastQueryResult: newArticles,
-        topArticles: newTopArticles
-      }, () => {this.saveState()});
+      this.updateArticleState(newArticles, newTopArticles)
     } else {
       // else load articles from API and load into top articles
-      const apiKey = `${process.env.REACT_APP_API_KEY}`
-      const url = ApiUrl
-      const myHeaders = new Headers({ [ApiKeyHeader]: apiKey })
+      utils.fetchArticles(this, publishers, dislikes, max)
+    }
+  }
 
-      fetch(url, {headers: myHeaders})
-        .then((response) => response.json())
-        .catch((error) => console.log(error))
-        .then((responseObject) => {
-            newArticles = sortByPublisher(responseObject.articles, this.state.preferredPublishers, this.dislikeThreshold);
-            newTopArticles = getTopArticles(newArticles, this.maxArticles);
-            this.setState({
-              allArticlesRead: false,
-              lastQueryResult: newArticles,
-              topArticles: newTopArticles
-            }, () => {this.saveState()});
-          });
-      }
+  updateArticleState(readStatus, newArticles, newTopArticles) {
+    this.setState({
+      allArticlesRead: readStatus,
+      lastQueryResult: newArticles,
+      topArticles: newTopArticles
+    }, () => {this.saveState()});
   }
 
   saveState() { localStorage.setItem(StateKey, JSON.stringify(this.state)); }
 
   toggleMode() {
     const newState = (this.state.mode === DOMStrings.light ? DOMStrings.dark : DOMStrings.light);
-    this.setState({
-      mode: newState
-    }, () => {this.saveState()});
+    this.setState({ mode: newState }, () => {this.saveState()});
   }
 
   toggleModal() {
     const newState = (this.state.modalRead === true ? false : true);
-    this.setState({
-      modalRead: newState
-    }, () => {this.saveState()});
+    this.setState({ modalRead: newState }, () => {this.saveState()});
   }
 
   render() {
@@ -177,48 +129,6 @@ class App extends React.Component {
     </div>
     );
   }
-}
-
-function getTopArticles(articles, maxArticles) {
-  const topArticles = [];
-  while (topArticles.length < maxArticles && articles.length !== 0) {
-    const article = articles.pop(-1);
-    let topArticle = {
-      data: article,
-      buttonState: -1
-    }
-    topArticle = addTopArticleMethods(topArticle);
-    topArticles.push(topArticle);
-  }
-
-  return topArticles;
-}
-
-function addTopArticleMethods(topArticle) {
-
-    const article = topArticle;
-    article.isUsed = function() {return this.buttonState === 0 || this.buttonState === 1};
-    article.setValue = function(value) {this.buttonState = value};
-    article.clear = function() {this.buttonState = -1}
-
-    return article;
-}
-
-function sortByPublisher(articles, publishers, limit) {
-  const eligibleArticles = articles.filter(article => publishers[article.source.name]  == null || publishers[article.source.name] > limit);
-  const sortedList = eligibleArticles;
-
-
-  sortedList.sort(function (a, b) {
-    const aValue = publishers[a.source.name] ? publishers[a.source.name] : 0;
-    const bValue = publishers[b.source.name] ? publishers[b.source.name] : 0;
-    const comparison = aValue - bValue;
-
-
-    return comparison;
-  });
-
-  return sortedList;
 }
 
 export default App;

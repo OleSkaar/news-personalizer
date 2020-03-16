@@ -1,5 +1,6 @@
 import React from 'react';
-import emoji from '../utils.js';
+import './modal.scss';
+import { emoji } from '../utils.js';
 import { DOMStrings } from '../constants.js';
 
 function Modal(props) {

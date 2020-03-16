@@ -1,18 +1,7 @@
 import React from 'react';
+import './cardbox.scss';
 import Card from '../card/card.jsx';
-import emoji from '../utils.js';
 import { DOMStrings } from '../constants.js';
-
-
-function LoadMore(props) {
-    return (
-      <div className={DOMStrings.cardboxLoadMoreWrapper + ' ' +
-        (props.allArticlesRead ? '' : ' ' + DOMStrings.cardboxLoadMoreWrapperCollapsed)}>
-        <button className={DOMStrings.button + ' ' + DOMStrings.buttonSpacing + ' ' + DOMStrings.buttonLarge}
-                onClick={props.loadMoreClick}>{emoji("➕", "Plus sign")} Load more!</button>
-      </div>
-    )
-}
 
 function Cardbox(props) {
   const cards = [];
@@ -37,6 +26,4 @@ function Cardbox(props) {
   );
 }
 
-
-
-export { Cardbox, LoadMore }
+export default Cardbox;
