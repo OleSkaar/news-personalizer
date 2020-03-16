@@ -11,6 +11,8 @@ import Header from './header/header.jsx';
 import Footer from './footer/footer.jsx';
 import Modal from './modal/modal.jsx';
 import { Cardbox, LoadMore } from './cardbox/cardbox.jsx';
+import { DOMStrings, StateKey, ApiUrl, ApiKeyHeader } from './constants.js';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -22,7 +24,7 @@ class App extends React.Component {
       searchQuery: '',
       topArticles: [],
       allArticlesRead: false,
-      mode: 'light',
+      mode: DOMStrings.light,
       modalRead: false
     }
     this.maxArticles = 6;
@@ -35,15 +37,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const storedState = JSON.parse(localStorage.getItem('state'));
+    const storedState = JSON.parse(localStorage.getItem(StateKey));
     if (storedState === null) {
-      // Get new articles from API
-      /*
-      const articles = this.fetchDummyArticles();
-      const topArticles = getTopArticles(articles, this.maxArticles);
-
-      this.setState({lastQueryResult: articles, topArticles: topArticles})
-      */
       this.loadMoreArticles();
 
     } else {
@@ -118,11 +113,11 @@ class App extends React.Component {
     } else {
       // else load articles from API and load into top articles
       const apiKey = `${process.env.REACT_APP_API_KEY}`
-      const url = `https://newsapi.org/v2/top-headlines?country=us`
-      const myHeaders = new Headers({ 'x-api-key': apiKey })
+      const url = ApiUrl
+      const myHeaders = new Headers({ [ApiKeyHeader]: apiKey })
 
       fetch(url, {headers: myHeaders})
-        .then((response) =>  {return response.json()})
+        .then((response) => response.json())
         .catch((error) => console.log(error))
         .then((responseObject) => {
             newArticles = sortByPublisher(responseObject.articles, this.state.preferredPublishers, this.dislikeThreshold);
@@ -136,10 +131,10 @@ class App extends React.Component {
       }
   }
 
-  saveState() { localStorage.setItem('state', JSON.stringify(this.state)); }
+  saveState() { localStorage.setItem(StateKey, JSON.stringify(this.state)); }
 
   toggleMode() {
-    const newState = (this.state.mode === 'light' ? 'dark' : 'light');
+    const newState = (this.state.mode === DOMStrings.light ? DOMStrings.dark : DOMStrings.light);
     this.setState({
       mode: newState
     }, () => {this.saveState()});
@@ -161,9 +156,9 @@ class App extends React.Component {
         modalRead={this.state.modalRead}
         onClick={() => this.toggleModal()}
       />
-      <div className={"app " + this.state.mode + (this.state.modalRead ? "" : " app--blur")}>
+      <div className={DOMStrings.appRoot + ' ' + this.state.mode + (this.state.modalRead ? "" : ' ' + DOMStrings.appRootBlur)}>
         <Header />
-        <div className="cardbox__wrapper">
+        <div className={DOMStrings.cardboxWrapper}>
           <Cardbox
             topArticles={this.state.topArticles}
             onClick={(value, articleIndex) => this.handleLikeClick(value, articleIndex)}

@@ -1,12 +1,15 @@
 import React from 'react';
 import Card from '../card/card.jsx';
 import emoji from '../utils.js';
+import { DOMStrings } from '../constants.js';
 
 
 function LoadMore(props) {
     return (
-      <div className={"cardbox__load-more-wrapper " + (props.allArticlesRead ? '' : ' cardbox__load-more-wrapper--collapsed')}>
-        <button className="button button--spacing button--large" onClick={props.loadMoreClick}>{emoji("➕", "Plus sign")} Load more!</button>
+      <div className={DOMStrings.cardboxLoadMoreWrapper + ' ' +
+        (props.allArticlesRead ? '' : ' ' + DOMStrings.cardboxLoadMoreWrapperCollapsed)}>
+        <button className={DOMStrings.button + ' ' + DOMStrings.buttonSpacing + ' ' + DOMStrings.buttonLarge}
+                onClick={props.loadMoreClick}>{emoji("➕", "Plus sign")} Load more!</button>
       </div>
     )
 }
@@ -28,7 +31,7 @@ function Cardbox(props) {
   }
 
   return (
-    <section className="cardbox">
+    <section className={DOMStrings.cardbox}>
       {cards}
     </section>
   );

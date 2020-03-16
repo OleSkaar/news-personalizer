@@ -1,7 +1,7 @@
 .card {
   background-color: var(--card-bg-color);
-  height: 380px;
-  max-width: 266px;
+  height: 320px;
+  max-width: 250px;
   flex: 1 1 auto;
   margin: 0 5px 5px 5px;
   display: flex;
@@ -33,7 +33,7 @@
     text-align: top;
     width: 100%;
     overflow: hidden;
-    font-size: 0.8em;
+    font-size: 0.7em;
     height: 35%;
     flex-grow: 1;
     display: flex;
@@ -55,8 +55,9 @@
     display: flex;
     flex-flow: row nowrap;
     align-items: stretch;
-    height: 10%;
+    height: 12%;
     background-color: var(--main-bg-color);
+    overflow: hidden;
   }
 
   &__publisher {
