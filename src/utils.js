@@ -94,6 +94,6 @@ export const fetchArticles = (app, publishers, dislikeThreshold, maxArticles) =>
     .then((responseObject) => {
         newArticles = sortByPublisher(responseObject.articles, publishers, dislikeThreshold);
         newTopArticles = getTopArticles(newArticles, maxArticles);
-        app.updateArticleState(newArticles, newTopArticles)
+        app.updateArticleState(false, newArticles, newTopArticles)
       });
   }

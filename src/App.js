@@ -72,7 +72,7 @@ class App extends React.Component {
       let newArticles = utils.sortByPublisher(currentArticles, publishers, dislikes);
       let newTopArticles = utils.getTopArticles(newArticles, max);
 
-      this.updateArticleState(newArticles, newTopArticles)
+      this.updateArticleState(false, newArticles, newTopArticles)
     } else {
       // else load articles from API and load into top articles
       utils.fetchArticles(this, publishers, dislikes, max)
